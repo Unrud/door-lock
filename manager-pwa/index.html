@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en" data-page="load">
+<meta charset="utf-8">
+<title>Door Lock</title>
+<meta content="width=device-width, initial-scale=1" name="viewport">
+<meta name="theme-color" content="#009966">
+<link href="icon.png" type="image/png" rel="shortcut icon">
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="page-edit-key.css">
+<link rel="stylesheet" href="page-keys.css">
+<link rel="manifest" href="doorlock.webmanifest">
+<script type="module" src="main.js"></script>
+<script>
+    navigator.serviceWorker?.register("sw.js");
+</script>
+
+<section id="keys">
+    <h1>Keys</h1>
+    <template>
+        <div class="buttons">
+            <button data-name="key" class="flex-1 big" style="padding-left: calc( 3 * 8px + 1rem )"></button>
+            <button title="Edit" data-name="edit">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                    <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+                </svg>
+            </button>
+        </div>
+    </template>
+    <button data-name="new">New Key</button>
+</section>
+
+<section id="edit-key">
+    <header>
+        <h1>Edit Key</h1>
+        <div class="buttons">
+            <button title="Share" data-name="share">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-share" viewBox="0 0 16 16">
+                    <path d="M13.5 1a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 2.5a2.5 2.5 0 1 1 .603 1.628l-6.718 3.12a2.499 2.499 0 0 1 0 1.504l6.718 3.12a2.5 2.5 0 1 1-.488.876l-6.718-3.12a2.5 2.5 0 1 1 0-3.256l6.718-3.12A2.5 2.5 0 0 1 11 2.5zm-8.5 4a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm11 5.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/>
+                </svg>
+            </button>
+            <button title="Copy" data-name="copy">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+                    <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                    <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                </svg>
+            </button>
+        </div>
+    </header>
+    <form autocomplete="off">
+        <input name="name" type="text" placeholder="Name" required>
+        <input name="url" type="url" placeholder="Url" required>
+        <input name="id" type="text" placeholder="Id">
+        <input name="secret" type="text" pattern="([a-zA-Z2-7]{8})*([a-zA-Z2-7]{2}={6}|[a-zA-Z2-7]{4}={4}|[a-zA-Z2-7]{5}={3}|[a-zA-Z2-7]{7}={1})?" placeholder="Secret" required>
+        <input name="uuid" type="hidden">
+        <div class="buttons">
+            <input data-name="create" type="submit" class="default flex-1" value="Create">
+            <input data-name="update" type="submit" class="default flex-1" value="Update">
+            <button title="Delete" type="button" data-name="delete" class="default">
+                <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"/>
+                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"/>
+                </svg>
+            </button>
+        </div>
+        <button title="Back" type="button" onclick="history.back()">
+            <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill="currentColor" d="M1.02698 11.9929L5.26242 16.2426L6.67902 14.8308L4.85766 13.0033L22.9731 13.0012L22.9728 11.0012L4.85309 11.0033L6.6886 9.17398L5.27677 7.75739L1.02698 11.9929Z"/>
+            </svg>
+        </button>
+    </form>
+</section>

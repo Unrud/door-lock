@@ -1,0 +1,7 @@
+#auth {
+    display: none;
+}
+
+:root[data-page="auth"] #auth {
+    display: block;
+}

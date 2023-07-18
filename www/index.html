@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" data-page="load">
+<meta charset="utf-8">
+<title>Door Lock</title>
+<meta content="width=device-width, initial-scale=1" name="viewport">
+<meta name="theme-color" content="#009966">
+<link href="icon.png" type="image/png" rel="shortcut icon">
+<link rel="stylesheet" href="base.css">
+<link rel="stylesheet" href="page-auth.css">
+<link rel="stylesheet" href="page-load.css">
+<link rel="stylesheet" href="page-result.css">
+<script type="module" src="main.js"></script>
+<script>
+    const URL = "/cgi-bin/door.lua";
+    const TITLE = "Door";
+</script>
+
+<section id="auth">
+    <h1 data-name="title"></h1>
+    <form autocomplete="off">
+        <input name="id" type="text" placeholder="Id">
+        <input name="password" type="text" pattern="\d{6}" placeholder="Password" required>
+        <input class="default" type="submit" value="Open">
+    </form>
+</section>
+
+<section id="load">
+    <h1 data-name="title"></h1>
+    <div class="loader">
+        <div class="lds-facebook"><div></div><div></div><div></div></div>
+    </div>
+</section>
+
+<section id="result">
+    <h1 data-name="title"></h1>
+    <p data-name="message"></p>
+    <button title="Back" onclick="history.back()">
+        <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path fill="currentColor" d="M1.02698 11.9929L5.26242 16.2426L6.67902 14.8308L4.85766 13.0033L22.9731 13.0012L22.9728 11.0012L4.85309 11.0033L6.6886 9.17398L5.27677 7.75739L1.02698 11.9929Z"/>
+        </svg>
+    </button>
+</section>

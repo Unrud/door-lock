@@ -1,0 +1,37 @@
+#edit-key {
+    display: none;
+}
+
+:root[data-page="edit-key"] #edit-key {
+    display: block;
+}
+
+#edit-key .buttons {
+    display: flex;
+}
+
+#edit-key header {
+    position: relative;
+}
+
+#edit-key header .buttons {
+    position: absolute;
+    right: 30px;
+    top: 0;
+    bottom: 0;
+}
+
+#edit-key header button {
+    background: none;
+}
+
+#edit-key button[data-name="delete"] {
+    color: var(--error-foreground-color);
+    background: var(--error-color);
+    border-top-color: var(--error-color-lighter);
+    border-bottom-color: var(--error-color-darker);
+}
+
+#edit-key input[data-name=update] {
+    padding-left: 40px;
+}
