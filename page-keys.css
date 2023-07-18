@@ -1,0 +1,29 @@
+#keys {
+    display: none;
+}
+
+:root[data-page="keys"] #keys {
+    display: block;
+}
+
+#keys button {
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+#keys .buttons {
+    display: flex;
+    margin: 8px 0;
+}
+
+#keys .buttons > *:not(:first-child) {
+    border-left: 1px solid var(--input-color-darker);
+}
+
+#keys button[data-name="key"] {
+    overflow-wrap: anywhere;
+}
+
+#keys button[data-name="new"] {
+    width: 100%;
+}
