@@ -1,5 +1,5 @@
 // Files to cache
-var cacheName = "doorlock0";
+var cacheName = "doorlock1";
 var contentToCache = [
   ".",
   "base.css",
