@@ -6,6 +6,7 @@ local otp = require("otp")
 local sha1 = require("sha1")
 
 local secrets = {
+    [""] = "***base32 encoded secret***",
 }
 local db_path = "/tmp/door"
 local gpio_path = "/sys/class/gpio/gpio7/value"
