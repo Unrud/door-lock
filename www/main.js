@@ -38,7 +38,7 @@ authPageForm.addEventListener("submit", async (event) => {
     showLoad();
     let status, message;
     try {
-        const response = await fetch(`${URL}?${encodeURI(auth)}`);
+        const response = await fetch(`${REQUEST_URL}?${encodeURI(auth)}`, {method: "POST"});
         message = await response.text();
         status = response.status;
     } catch (err) {

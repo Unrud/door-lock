@@ -81,6 +81,14 @@ local function http_response(status, message, body)
         "\n%s", status, message, body))
 end
 
+if os.getenv("REQUEST_METHOD") != "POST" then
+    return http_response(405, "Method Not Allowed", "Request-Denied")
+end
+
+if (os.getenv("CONTENT_TYPE") or "") != "" then
+    return http_response(415, "Unsupported Media Type", "Request-Denied")
+end
+
 local for_time = os.time()
 local query = decode_query(os.getenv("QUERY_STRING") or "")
 
