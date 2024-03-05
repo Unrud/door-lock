@@ -48,7 +48,7 @@ authPageForm.addEventListener("submit", async (event) => {
     }
     if (200 <= status && status < 300) {
         showResult("success", message);
-    } else if (status === 429) {
+    } else if (status === 429 || status === 503) {
         showResult("warn", message);
     } else {
         showResult("error", message);
