@@ -134,10 +134,6 @@ const showEditKey = (keyTemplate) => {
     }
 };
 
-for (const name in getEditKey()) {
-    editKeyPageForm.elements[name].addEventListener("change", () => updateEditKey());
-}
-
 editKeyPageCopy.addEventListener("click", () => navigator.clipboard.writeText(keyToUri(getEditKey())));
 
 editKeyPageShare.addEventListener("click", () => {
