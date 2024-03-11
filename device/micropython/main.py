@@ -4,7 +4,7 @@ import network
 import ntptime
 import sys
 import time
-from machine import Pin
+from machine import Pin, WDT
 
 # https://github.com/miguelgrinberg/microdot
 from microdot import Microdot, send_file
@@ -30,6 +30,13 @@ __min_time = None
 __deadline = {}
 __pin = Pin(PIN, Pin.OUT)
 __pin_active = False
+
+
+async def watchdog_task():
+    wdt = WDT()
+    while True:
+        await asyncio.sleep(1)
+        wdt.feed()
 
 
 def get_time():
@@ -130,4 +137,5 @@ nic.active(True)
 nic.connect(WIFI_SSID, WIFI_PASSWORD)
 
 asyncio.create_task(time_task())
+asyncio.create_task(watchdog_task())
 app.run(port=80)
