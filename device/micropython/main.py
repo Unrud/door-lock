@@ -26,6 +26,9 @@ PIN = 0
 PIN_ACTIVE_SECS = 5
 
 
+__wdt = WDT()
+__wdt_monitors = []
+
 __min_time = None
 __deadline = {}
 __pin = Pin(PIN, Pin.OUT)
@@ -33,10 +36,20 @@ __pin_active = False
 
 
 async def watchdog_task():
-    wdt = WDT()
+    good_times = {}
     while True:
+        now = time.ticks_ms()
+        good = True
+        for monitor_func, timeout in __wdt_monitors:
+            good_time = good_times.get(id(monitor_func), now)
+            if not monitor_func():
+                good_time = now
+            elif time.ticks_diff(now, good_time) >= timeout:
+                good = False
+            good_times[id(monitor_func)] = good_time
+        if good:
+            __wdt.feed()
         await asyncio.sleep(1)
-        wdt.feed()
 
 
 def get_time():
@@ -52,6 +65,8 @@ async def time_task():
     while True:
         try:
             ntptime.settime()
+        except MemoryError:
+            raise
         except Exception as e:
             sys.print_exception(e)
             await asyncio.sleep(60)
@@ -91,6 +106,12 @@ def verify_totp(time_, secret, pin):
 
 
 app = Microdot()
+
+
+@app.errorhandler(MemoryError)
+async def memory_error(request, exception):
+    request.app.shutdown()
+    return 'Out of memory', 500
 
 
 @app.get('/')
@@ -136,6 +157,9 @@ nic = network.WLAN(network.STA_IF)
 nic.active(True)
 nic.connect(WIFI_SSID, WIFI_PASSWORD)
 
-asyncio.create_task(time_task())
-asyncio.create_task(watchdog_task())
+__wdt_monitors.extend([
+    (asyncio.create_task(time_task()).done, 0),
+    (asyncio.create_task(watchdog_task()).done, 0),
+    (lambda: not nic.isconnected(), 600_000),
+])
 app.run(port=80)
