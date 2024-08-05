@@ -29,6 +29,10 @@ PIN_ACTIVE_SECS = 5
 __wdt = WDT()
 __wdt_monitors = []
 
+network.country(WIFI_COUNTRY)
+network.hostname(HOSTNAME)
+__nic = network.WLAN(network.STA_IF)
+
 __min_time = None
 __deadline = {}
 __pin = Pin(PIN, Pin.OUT)
@@ -50,6 +54,15 @@ async def watchdog_task():
         if good:
             __wdt.feed()
         await asyncio.sleep(1)
+
+
+async def wifi_task():
+    __nic.active(True)
+    # Reconnect WIFI to renew DHCP lease
+    while True:
+        __nic.connect(WIFI_SSID, WIFI_PASSWORD)
+        await asyncio.sleep(60 * 60)
+        __nic.disconnect()
 
 
 def get_time():
@@ -151,15 +164,10 @@ def index(request):
     return 'OK', 200
 
 
-network.country(WIFI_COUNTRY)
-network.hostname(HOSTNAME)
-nic = network.WLAN(network.STA_IF)
-nic.active(True)
-nic.connect(WIFI_SSID, WIFI_PASSWORD)
-
 __wdt_monitors.extend([
     (asyncio.create_task(time_task()).done, 0),
     (asyncio.create_task(watchdog_task()).done, 0),
-    (lambda: not nic.isconnected(), 600_000),
+    (asyncio.create_task(wifi_task()).done, 0),
+    (lambda: not __nic.isconnected(), 600_000),
 ])
 app.run(port=80)
