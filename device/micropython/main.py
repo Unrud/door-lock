@@ -57,12 +57,14 @@ async def watchdog_task():
 
 
 async def wifi_task():
-    __nic.active(True)
     # Reconnect WIFI to renew DHCP lease
     while True:
+        __nic.active(True)
         __nic.connect(WIFI_SSID, WIFI_PASSWORD)
         await asyncio.sleep(60 * 60)
         __nic.disconnect()
+        __nic.active(False)
+        __nic.deinit()
 
 
 def get_time():
