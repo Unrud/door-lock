@@ -65,7 +65,7 @@ const decodeBase32 = (s) => {
 const generateHotp = async (secret, counter, digits = 6) => {
     const secretBytes = decodeBase32(secret);
     const secretKey = await window.crypto.subtle.importKey(
-        "raw", secretBytes, { name: 'HMAC', hash: { name: 'SHA-1' } }, false, ["sign"]);
+        "raw", secretBytes, { name: "HMAC", hash: { name: "SHA-1" } }, false, ["sign"]);
     const counterBytes = new Uint8Array(8);
     for (let i = counterBytes.length - 1; i >= 0; i -= 1) {
         counterBytes[i] = counter & 0xFF;
@@ -101,7 +101,8 @@ const showKeys = () => {
         keyButton.innerText = key.name;
         keyButton.addEventListener("click", async () => {
             const password = await generateTotp(key.secret);
-            location.href = `${key.url}#${key.id}${key.id && ":"}${password}`;
+            const params = new URLSearchParams({ id: key.id, password });
+            location.href = `${key.url}?${params.toString()}`;
         });
         editButton.addEventListener("click", () => showEditKey(key));
         keysPageTemplate.parentNode.insertBefore(entry, keysPageTemplate);
