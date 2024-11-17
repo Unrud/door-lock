@@ -11,32 +11,18 @@ from microdot import Microdot, Response
 # https://github.com/eddmann/pico-2fa-totp
 from totp import totp
 
-TITLE = 'Door'
-WIFI_SSID = ''
-WIFI_PASSWORD = ''
-HOSTNAME = 'door'
-WIFI_COUNTRY = ''
-SECRETS = {
-    '': '***base32 encoded secret***',
-}
-LOCKOUT_SECS = 30
-TOTP_STEP_SECS = 30
-TOTP_DIGITS = 6
-TOTP_ACCEPTED_DEVIATION = 5
-PIN = 0
-PIN_ACTIVE_SECS = 5
-
+import config
 
 __wdt = WDT()
 __wdt_monitors = []
 
-network.country(WIFI_COUNTRY)
-network.hostname(HOSTNAME)
+network.country(config.WIFI_COUNTRY)
+network.hostname(config.HOSTNAME)
 __nic = network.WLAN(network.STA_IF)
 
 __min_time = None
 __deadline = {}
-__pin = Pin(PIN, Pin.OUT)
+__pin = Pin(config.PIN, Pin.OUT)
 __pin_active = False
 
 
@@ -61,7 +47,7 @@ async def wifi_task():
     # Reconnect WIFI to renew DHCP lease
     while True:
         __nic.active(True)
-        __nic.connect(WIFI_SSID, WIFI_PASSWORD)
+        __nic.connect(config.WIFI_SSID, config.WIFI_PASSWORD)
         await asyncio.sleep(60 * 60)
         __nic.disconnect()
         __nic.active(False)
@@ -99,17 +85,17 @@ async def activate_pin_task():
     __pin.on()
     __pin_active = True
     try:
-        await asyncio.sleep(PIN_ACTIVE_SECS)
+        await asyncio.sleep(config.PIN_ACTIVE_SECS)
     finally:
         __pin.off()
         __pin_active = False
 
 
 def verify_totp(time_, secret, pin):
-    for deviation in range(-TOTP_ACCEPTED_DEVIATION,
-                           TOTP_ACCEPTED_DEVIATION + 1):
-        if pin == totp(time_ + deviation*TOTP_STEP_SECS, secret,
-                       TOTP_STEP_SECS, TOTP_DIGITS)[0]:
+    for deviation in range(-config.TOTP_ACCEPTED_DEVIATION,
+                           config.TOTP_ACCEPTED_DEVIATION + 1):
+        if pin == totp(time_ + deviation * config.TOTP_STEP_SECS, secret,
+                       config.TOTP_STEP_SECS, config.TOTP_DIGITS)[0]:
             return True
     return False
 
@@ -140,8 +126,8 @@ async def html_header_stream():
     yield '<html lang="en">'
     yield '<meta charset="utf-8">'
     yield '<title>'
-    if TITLE:
-        yield f'{q(TITLE)} - '
+    if config.TITLE:
+        yield f'{q(config.TITLE)} - '
     yield 'Door Lock</title>'
     yield '<meta content="width=device-width, initial-scale=1"'
     yield ' name="viewport">'
@@ -162,12 +148,13 @@ def index(request):
     async def stream():
         yield from html_header_stream()
         yield '<section>'
-        yield f'<h1>{q(TITLE)}</h1>'
+        yield f'<h1>{q(config.TITLE)}</h1>'
         yield '<form autocomplete="off" method="get" action="/">'
         yield '<input name="id" type="text" placeholder="Id"'
         yield f' value="{q(id_)}">'
         yield '<input name="password" type="text" inputmode="numeric"'
-        yield f' maxlength="{TOTP_DIGITS:d}" pattern="\\d{{{TOTP_DIGITS:d}}}"'
+        yield f' maxlength="{config.TOTP_DIGITS:d}"'
+        yield f' pattern="\\d{{{config.TOTP_DIGITS:d}}}"'
         yield f' value="{q(password)}" placeholder="Password" required>'
         yield '<input class="default" type="submit" value="Open">'
         yield '</form>'
@@ -177,7 +164,7 @@ def index(request):
 
 
 def auth(id_, password):
-    secret = SECRETS.get(id_)
+    secret = config.SECRETS.get(id_)
     if secret is None:
         return Response.redirect('/status/404/Unknown-Id')
     time_ = get_time()
@@ -185,9 +172,9 @@ def auth(id_, password):
         return Response.redirect('/status/503/Time-Not-Synchronized')
     if time_ <= __deadline.get(id_, 0):
         return Response.redirect('/status/429/Rate-Limited')
-    if (len(password) != TOTP_DIGITS or
+    if (len(password) != config.TOTP_DIGITS or
             not verify_totp(time_, secret, password)):
-        __deadline[id_] = time_ + LOCKOUT_SECS
+        __deadline[id_] = time_ + config.LOCKOUT_SECS
         return Response.redirect('/status/403/Wrong-Password')
     asyncio.create_task(activate_pin_task())
     return Response.redirect('/status/200/OK')
@@ -224,7 +211,7 @@ def status(request, status, status_text):
         yield f'background:var(--{level}-color);'
         yield f'color:var(--{level}-foreground-color);'
         yield '">'
-        yield f'<h1>{q(TITLE)}</h1>'
+        yield f'<h1>{q(config.TITLE)}</h1>'
         yield f'<p style="margin:30px;text-align:center;">{q(status_text)}</p>'
         yield '<button title="Back" onclick="history.back()" style="'
         yield 'width:100%;'

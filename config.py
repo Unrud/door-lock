@@ -1,0 +1,14 @@
+TITLE = 'Door'
+WIFI_SSID = ''
+WIFI_PASSWORD = ''
+HOSTNAME = 'door'
+WIFI_COUNTRY = ''
+SECRETS = {
+    '': '***base32 encoded secret***',
+}
+LOCKOUT_SECS = 30
+TOTP_STEP_SECS = 30
+TOTP_DIGITS = 6
+TOTP_ACCEPTED_DEVIATION = 5
+PIN = 0
+PIN_ACTIVE_SECS = 5
