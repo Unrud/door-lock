@@ -1,10 +1,10 @@
-TITLE = 'Door'
-WIFI_SSID = ''
-WIFI_PASSWORD = ''
-HOSTNAME = 'door'
-WIFI_COUNTRY = ''
+TITLE = "Door"
+WIFI_SSID = ""
+WIFI_PASSWORD = ""
+HOSTNAME = "door"
+WIFI_COUNTRY = ""
 SECRETS = {
-    '': '***base32 encoded secret***',
+    "": "***base32 encoded secret***",
 }
 LOCKOUT_SECS = 30
 TOTP_STEP_SECS = 30

@@ -57,14 +57,14 @@ TOTP secret keys, and relay pin:
 
 ```python
 # Example
-TITLE = 'Front Door'
-WIFI_SSID = 'your ssid'
-WIFI_PASSWORD = 'your password'
-HOSTNAME = 'front-door'
-WIFI_COUNTRY = 'it'
+TITLE = "Front Door"
+WIFI_SSID = "your ssid"
+WIFI_PASSWORD = "your password"
+HOSTNAME = "front-door"
+WIFI_COUNTRY = "it"
 SECRETS = {
-    '': '6fvjwuo7gkrlygu7onzmu4uqkbuz5mbg',
-    'other id': 'dk3fq6lok3q67ec4pdy6p2kmdddmufu2',
+    "": "6fvjwuo7gkrlygu7onzmu4uqkbuz5mbg",
+    "other id": "dk3fq6lok3q67ec4pdy6p2kmdddmufu2",
 }
 PIN = 0
 ```
