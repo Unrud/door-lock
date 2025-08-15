@@ -1,127 +1,120 @@
-:root {
-    --light-color: hsl(0, 0%, 95%);
-    --dark-color: hsl(280, 10%, 25%);
-
-    --background-color: var(--light-color);
-    --foreground-color: var(--dark-color);
-
-    --input-color: hsl(0, 0%, 85%);
-    --input-color-lighter: hsl(0, 0%, 100%);
-    --input-color-darker: hsl(0, 0%, 70%);
-
-    --accent-color: hsl(160, 100%, 30%);
-    --accent-color-lighter: hsl(160, 100%, 34%);
-    --accent-color-darker: hsl(160, 100%, 26%);
-    --accent-foreground-color: var(--light-color);
-
-    --success-color: var(--accent-color);
-    --success-color-lighter: var(--accent-color-lighter);
-    --success-color-darker: var(--accent-color-darker);
-    --success-foreground-color: var(--accent-foreground-color);
-
-    --warn-color: hsl(45, 100%, 40%);
-    --warn-color-lighter: hsl(45, 100%, 44%);
-    --warn-color-darker: hsl(45, 100%, 36%);
-    --warn-foreground-color: var(--light-color);
-
-    --error-color: hsl(0, 100%, 30%);
-    --error-color-lighter: hsl(0, 100%, 34%);
-    --error-color-darker: hsl(0, 100%, 26%);
-    --error-foreground-color: var(--light-color);
-
-    --highlight-color: hsl(160, 100%, 40%);
-}
-
 * {
-    padding: 0;
-    margin: 0;
+    box-sizing: border-box;
 }
 
-html, input, button {
+:root {
+    color-scheme: light dark;
     font-family: sans-serif;
-    color: var(--foreground-color);
-}
-
-html {
-    background: var(--dark-color);
+    overflow-wrap: anywhere;
     height: 100%;
+    --status-color: none;
+}
+:root[data-status="success"] {
+    --status-color: Green;
+}
+:root[data-status="warn"] {
+    --status-color: Orange;
+}
+:root[data-status="error"] {
+    --status-color: OrangeRed;
 }
 
 body {
     min-height: 100%;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    flex-direction: column;
+    padding: 8px;
+    margin: 0;
 }
 
-section {
-    background: var(--background-color);
-    box-shadow: rgba(0, 0, 0, 25%) 0px 54px 55px, rgba(0, 0, 0, 12%) 0px -12px 30px, rgba(0, 0, 0, 12%) 0px 4px 6px, rgba(0, 0, 0, 17%) 0px 12px 13px, rgba(0, 0, 0, 9%) 0px -3px 5px;
-    max-width: 20rem;
-    min-width: 15rem;
+section::before {
+    content: "";
+    display: block;
+    position: absolute;
+    inset: -8px;
+    height: 30px;
+    background: var(--status-color);
 }
 
 input, button {
-    font-size: 1em;
-    border: none;
-    text-decoration: none;
     display: block;
-    background: var(--input-color);
-    outline: none;
-    box-sizing: border-box;
-    position: relative;
-}
-
-input:focus-visible, button:focus-visible, input[type="submit"]:active, button:active {
-    box-shadow: 0px 0px 2px 2px var(--highlight-color);
-    z-index: 1;
-}
-
-input[type="text"], input[type="url"], input[type="number"], input[type="password"] {
     padding: 8px;
-    border-radius: 4px;
-}
-
-input[type="text"]:focus-visible, input[type="url"]:focus-visible, input[type="number"]:focus-visible, input[type="password"]:focus-visible {
-    box-shadow: inset 0px 0px 2px 2px var(--highlight-color);
-}
-
-input[type="submit"], input[type="reset"], button {
-    padding: 8px;
-    text-align: center;
-    cursor: pointer;
-}
-
-input[type="submit"].default, input[type="reset"].default, button.default {
-    padding-top: 20px;
-    padding-bottom: 20px;
-    color: var(--accent-foreground-color);
-    background: var(--accent-color);
-    border-top: 8px solid var(--accent-color-lighter);
-    border-bottom: 8px solid var(--accent-color-darker);
-}
-
-h1 {
-    margin: 30px;
-    text-align: center;
-    font-size: 1.5em;
-}
-
-form > input {
-    margin: 30px;
-    width: calc(100% - 2 * 30px);
-}
-
-form > input[type="submit"], form > input[type="reset"], form > button {
-    margin: 0;
     width: 100%;
 }
 
-.big {
-    font-size: 1.2em;
+input[type="submit"], input[type="reset"], button {
+    cursor: pointer;
+    text-align: center;
+}
+
+h1, p {
+    text-align: center;
+}
+
+h1 {
+    font-size: 2em;
     font-weight: bold;
 }
 
-.flex-1 {
+h1, p, form > input:not([type="submit"], [type="reset"]) {
+    margin: 30px 0;
+}
+
+.big {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.buttons {
+    display: flex;
+}
+
+.buttons > * {
+    width: auto;
+}
+
+.buttons > .big {
     flex: 1;
+}
+
+@media (min-width: 17rem) {
+
+    body {
+        background: var(--status-color);
+        position: relative;
+    }
+
+    body::after {
+        content: "";
+        display: block;
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        background: rgba(0, 0, 0, 25%);
+    }
+
+    section {
+        background: Canvas;
+        position: relative;
+        box-shadow: rgba(0, 0, 0, 25%) 0px 54px 55px, rgba(0, 0, 0, 12%) 0px -12px 30px, rgba(0, 0, 0, 12%) 0px 4px 6px, rgba(0, 0, 0, 17%) 0px 12px 13px, rgba(0, 0, 0, 9%) 0px -3px 5px;
+        width: 20rem;
+        max-width: 100%;
+        margin: auto;
+    }
+
+    section::before {
+        inset: 0;
+        height: 22px;
+    }
+
+    h1, p, form > input:not([type="submit"], [type="reset"]) {
+        margin: 30px;
+    }
+
+    form > input:not([type="submit"], [type="reset"]) {
+        width: calc(100% - 2 * 30px);
+    }
+
 }

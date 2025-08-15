@@ -17,7 +17,5 @@
     "launch_handler": {
         "client_mode": "navigate-existing"
     },
-    "serviceworker": {"src": "sw.js" },
-    "theme_color": "#009966",
-    "background_color": "#423946"
+    "serviceworker": {"src": "sw.js"}
 }

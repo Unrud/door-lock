@@ -6,32 +6,29 @@
     display: block;
 }
 
-#edit-key .buttons {
-    display: flex;
-}
-
 #edit-key header {
     position: relative;
 }
 
 #edit-key header .buttons {
     position: absolute;
-    right: 30px;
+    right: 0;
     top: 0;
     bottom: 0;
 }
 
-#edit-key header button {
-    background: none;
+#edit-key header h1 {
+    padding: 0 35px;
 }
 
-#edit-key button[data-name="delete"] {
-    color: var(--error-foreground-color);
-    background: var(--error-color);
-    border-top-color: var(--error-color-lighter);
-    border-bottom-color: var(--error-color-darker);
-}
-
-#edit-key input[data-name=update] {
+#edit-key *[data-name="update"] {
     padding-left: 40px;
+}
+
+@media (min-width: 17rem) {
+
+    #edit-key header .buttons {
+        right: 30px;
+    }
+
 }

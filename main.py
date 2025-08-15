@@ -130,9 +130,12 @@ def q(s):
     )
 
 
-async def html_header_stream():
+async def html_header_stream(status_level=None):
     yield "<!DOCTYPE html>"
-    yield '<html lang="en">'
+    yield '<html lang="en"'
+    if status_level:
+        yield f' data-status="{status_level}"'
+    yield '>'
     yield '<meta charset="utf-8">'
     yield "<title>"
     if config.TITLE:
@@ -140,7 +143,6 @@ async def html_header_stream():
     yield "Door Lock</title>"
     yield '<meta content="width=device-width, initial-scale=1"'
     yield ' name="viewport">'
-    yield '<meta name="theme-color" content="#009966">'
     yield '<link href="/icon.png" type="image/png" rel="shortcut icon">'
     yield '<link rel="stylesheet" href="/base.css">'
 
@@ -165,7 +167,7 @@ def index(request):
         yield f' maxlength="{config.TOTP_DIGITS:d}"'
         yield f' pattern="\\d{{{config.TOTP_DIGITS:d}}}"'
         yield f' value="{q(password)}" placeholder="Password" required>'
-        yield '<input class="default" type="submit" value="Open">'
+        yield '<input class="big" type="submit" value="Open">'
         yield "</form>"
         yield "</section>"
 
@@ -212,24 +214,17 @@ def status(request, status, status_text):
 
     async def stream():
         if 200 <= status and status < 300:
-            level = "success"
+            status_level = "success"
         elif status == 429 or status == 503:
-            level = "warn"
+            status_level = "warn"
         else:
-            level = "error"
-        yield from html_header_stream()
+            status_level = "error"
+        yield from html_header_stream(status_level)
         yield "<noscript><style>button{display:none;}</style></noscript>"
-        yield '<section style="'
-        yield f"background:var(--{level}-color);"
-        yield f"color:var(--{level}-foreground-color);"
-        yield '">'
+        yield "<section>"
         yield f"<h1>{q(config.TITLE)}</h1>"
-        yield f'<p style="margin:30px;text-align:center;">{q(status_text)}</p>'
-        yield '<button title="Back" onclick="history.back()" style="'
-        yield "width:100%;"
-        yield f"background:var(--{level}-color-darker);"
-        yield f"color:var(--{level}-foreground-color);"
-        yield '">'
+        yield f'<p>{q(status_text)}</p>'
+        yield '<button title="Back" onclick="history.back()">'
         yield '<svg width="1em" height="1em" viewBox="0 0 24 24" fill="none"'
         yield ' xmlns="http://www.w3.org/2000/svg">'
         yield '<path fill="currentColor" d="M1.02698 11.9929L5.26242 16.2426'
